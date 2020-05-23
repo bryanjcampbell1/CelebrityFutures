@@ -3,6 +3,9 @@ import {Button, InputGroup, FormControl, Modal, Card, Table} from 'react-bootstr
 
 import {ChevronLeft, X, PlusCircle, DashCircle} from 'react-bootstrap-icons';
 
+import abi from "./abi"
+import addresses from "./addresses";
+
 class BuyModal extends Component {
   constructor(props) {
     super(props)
@@ -51,6 +54,44 @@ class BuyModal extends Component {
           this.setState({screen:4});
       }
   }
+
+    async approveB(){
+        console.log("send b");
+
+        let tokenB = new this.state.web3.eth.Contract(abi.erc20.abi, addresses.collateralToken);
+
+        await tokenB.methods.approve(add, 500).send({from: this.state.accounts[0]})
+            .then((receipt) => {
+                console.log(receipt);
+
+            });
+
+
+        this.setState({screen:2})
+
+        return true;
+
+    }
+
+    async pay(){
+        let swapContract = new this.state.web3.eth.Contract(abi.swap4.abi, addresses.swapContract);
+
+        await swapContract.methods.tradeAforB(this.state.quantity).send({from: this.state.accounts[0]})
+            .then((receipt2) =>{
+
+            });
+
+        return true;
+
+    }
+
+    async buy(){
+        await this.approveB();
+        await this.pay();
+
+        this.setState({screen:3})
+    }
+
   render(){
     return (
         <Modal
@@ -193,11 +234,15 @@ class BuyModal extends Component {
                                 <p style={{fontSize:14, color:'slate', fontWeight:'bold'}}>Total:&nbsp;</p>
                                 <p style={{fontSize:14, color:'slate', }}>{this.state.quantity*this.state.selectedShares.price + 2.99}  DAI</p>
                               </div>
+                                <div style={{display:'flex'}}>
+                                    <p style={{fontSize:16, color:'red', fontWeight:'bold'}}>Note:&nbsp;</p>
+                                    <p style={{fontSize:16, color:'red', }}>You will need to sign 2 transactions</p>
+                                </div>
 
                             </Card.Body>
                           </Card>
                           <div style={{display:'flex', justifyContent:'center', marginTop:40 }}>
-                            <Button size="lg" onClick={() => this.setState({screen:3})} style={{color:'white', backgroundColor:'seagreen'}}>Buy Share</Button>
+                            <Button size="lg" onClick={() => this.buy()  } style={{color:'white', backgroundColor:'seagreen'}}>Buy Share</Button>
                           </div>
                         </div>);
                     case 3:

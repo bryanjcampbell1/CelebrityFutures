@@ -7,10 +7,9 @@ contract Swap {
     IERC20 public tokenA = IERC20(0x8A976Da9aF53B799d8Dd380B3D2d9CEEf8E0A26f);
     IERC20 public tokenB = IERC20(0x9923EF747eB98Ad8d933D620C7F38dE44C953102);
 
-    address public Alice = 0x54ae04FDBE80452B63665b510116510596341916;
-    address public Bob   = 0x9BB77e8e0d0A288d6B225E4DE8ec298f90bAf248;
+    address public Alice = 0x659382419f2A17E15b5c7aB31095a974b7fEc45E;
 
-    uint256 exchangeRate = 3;
+    uint256 exchangeRate = 87;
 
 
 

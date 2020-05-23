@@ -2,11 +2,12 @@ import React, { Component } from 'react'
 import {Button, InputGroup, FormControl, Modal, Card} from 'react-bootstrap';
 
 
-
 import {ChevronLeft, X, PlusCircle, DashCircle} from 'react-bootstrap-icons';
 
 import getWeb3 from "./getWeb3";
 import ABIs from "./abis.js";
+import abi from "./abi";
+import addresses from "./addresses";
 
 class BetAgainstModal extends Component {
   constructor(props) {
@@ -42,28 +43,43 @@ class BetAgainstModal extends Component {
     this.setState({moreDetails:true})
   }
 
-  async sponsorShares(){
+    async sponsorShares(){
+        let synthTokenAmount = this.state.quantity;
+        let collateralTokenAmount = this.state.quantity*1.5;
 
-      //Gnache host 9545 address
-      let address = '0xa7Efdc8745a8a8D9C6D6DB60cF18056675C42fC4';
-      let TravisScottContract = new this.state.web3.eth.Contract(ABIs.empABI, address);
+        let empContract = new this.state.web3.eth.Contract(ABIs.empABI, addresses.empContract);
 
-      let synthTokenAmount = this.state.quantity;
-      let collateralTokenAmount = this.state.quantity*1.5;
+        await empContract.methods.create({ rawValue: this.state.web3.utils.toWei(collateralTokenAmount.toString() ) }, { rawValue: this.state.web3.utils.toWei(synthTokenAmount.toString() ) }).send({from: this.state.accounts[0]})
+            .then(function(receipt){
+                // receipt can also be a new contract instance, when coming from a "contract.deploy({...}).send()"
+            });
+
+        this.setState({screen:3})
+    }
 
 
-      await TravisScottContract.methods.create({ rawValue: this.state.web3.utils.toWei(collateralTokenAmount.toString() ) }, { rawValue: this.state.web3.utils.toWei(synthTokenAmount.toString() ) }).send({from: this.state.accounts[0]})
-          .then(function(receipt){
-              // receipt can also be a new contract instance, when coming from a "contract.deploy({...}).send()"
-
-          });
-
-      this.setState({screen:3})
-  }
 
   updateQuantity(e){
     this.setState({quantity:e})
   }
+
+    approveTrade(){
+
+
+
+        let that = this;
+
+        let tokenA = new this.state.web3.eth.Contract(abi.erc20.abi, addresses.synthToken);
+
+        tokenA.methods.approve(addresses.swapContract, this.state.quantity).send({from: this.state.accounts[0]})
+            .then((receipt) => {
+                console.log(receipt);
+                that.props.onHide();
+
+            });
+
+
+    }
 
   render(){
     return (
@@ -303,11 +319,17 @@ class BetAgainstModal extends Component {
                               </Card.Body>
                             </Card>
                             <div style={{display:'flex'}}>
-                              <p style={{fontSize:14, color:'grey', marginTop:30}}>You may now check your portfolio for updates</p>
+                              <p style={{fontSize:14, color:'grey', marginTop:30}}>Would you like to put your newly created shares up for sale?</p>
+                            </div>
+                            <div style={{display:'flex'}}>
+                            <p style={{fontSize:14, color:'grey', marginTop:30}}>We will match you with a buyer when one becomes available and trade on your belalf</p>
                             </div>
                             <div style={{display:'flex', justifyContent:'center', marginTop:30 }}>
+                                <Button size="lg" onClick={() => this.approveTrade()} style={{ background:'slategray', fontSize:22, color:'whitesmoke', width:150,}}>
+                                Yes
+                                </Button>
                               <Button size="lg" onClick={this.props.onHide} style={{ background:'whitesmoke', fontSize:22, color:'slategray', width:150,}}>
-                                Ok
+                                No
                               </Button>
                             </div>
 

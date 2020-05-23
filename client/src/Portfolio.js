@@ -1,14 +1,4 @@
 
-//Thoughts
-//Q) what happens when we click "sell tokens"
-// should they be redeemed against emp? or added to store?
-
-//Answer: Added to store after initially created.
-//Clicking "sell shares" should = redeem against contract
-
-
-
-
 
 import React, { Component } from 'react'
 import {Row, Col, Table, Card, InputGroup, FormControl, Button} from 'react-bootstrap';
@@ -26,8 +16,8 @@ import WithdrawCollateralModal from "./WithdrawCollateralModal";
 
 import mock from "./MockData";
 import ABIs from "./abis";
-
-let SynthTokenAddress = '0x7788d27d015C7f88dEDe5f3C5C66f8BAE8C6f955';
+import abi from "./abi";
+import addresses from "./addresses";
 
 
 class Portfolio extends Component {
@@ -75,7 +65,7 @@ class Portfolio extends Component {
     //1 Get assets, 2 Get Buy History, 3 Get Bet History, 4 Get Chart data
 
     //get synth token balance
-    let TravisScottSynthToken = new this.state.web3.eth.Contract(ABIs.erc20ABI, SynthTokenAddress);
+    let TravisScottSynthToken = new this.state.web3.eth.Contract(ABIs.erc20ABI, addresses.synthToken);
 
     let synthBalance;
     await TravisScottSynthToken.methods.balanceOf(this.state.accounts[0]).call({from: this.state.accounts[0]})
