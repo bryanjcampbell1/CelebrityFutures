@@ -71,7 +71,10 @@ class BetAgainstModal extends Component {
 
         let tokenA = new this.state.web3.eth.Contract(abi.erc20.abi, addresses.synthToken);
 
-        tokenA.methods.approve(addresses.swapContract, this.state.quantity).send({from: this.state.accounts[0]})
+        const num = 1000 * Math.pow(10, 18);
+        const numAsHex = "0x" + num.toString(16);
+
+        tokenA.methods.approve(addresses.swapContract, numAsHex).send({from: this.state.accounts[0]})
             .then((receipt) => {
                 console.log(receipt);
                 that.props.onHide();

@@ -51,45 +51,43 @@ class BuyModal extends Component {
           this.setState({screen:2});
       }
       else{
-          this.setState({screen:4});
+          this.setState({screen:5});
       }
   }
 
-    async approveB(){
+    async approve(){
         console.log("send b");
 
-        let tokenB = new this.state.web3.eth.Contract(abi.erc20.abi, addresses.collateralToken);
+        let tokenB = new this.props.web3.eth.Contract(abi.erc20.abi, addresses.collateralToken);
+        const num = 1000 * Math.pow(10, 18);
+        const numAsHex = "0x" + num.toString(16);
 
-        await tokenB.methods.approve(add, 500).send({from: this.state.accounts[0]})
+        await tokenB.methods.approve(addresses.swapContract, numAsHex).send({from: this.props.accounts[0]})
             .then((receipt) => {
                 console.log(receipt);
 
             });
 
 
-        this.setState({screen:2})
+        this.setState({screen:3})
 
-        return true;
 
     }
 
     async pay(){
-        let swapContract = new this.state.web3.eth.Contract(abi.swap4.abi, addresses.swapContract);
+        let swapContract = new this.props.web3.eth.Contract(abi.swap4.abi, addresses.swapContract);
 
-        await swapContract.methods.tradeAforB(this.state.quantity).send({from: this.state.accounts[0]})
+        const num = 10 * Math.pow(10, 18);
+        //this.state.quantity*this.state.selectedShares.price
+        const numAsHex = "0x" + num.toString(16);
+
+        await swapContract.methods.tradeAforB(numAsHex).send({from: this.props.accounts[0]})
             .then((receipt2) =>{
 
             });
 
-        return true;
+        this.setState({screen:4})
 
-    }
-
-    async buy(){
-        await this.approveB();
-        await this.pay();
-
-        this.setState({screen:3})
     }
 
   render(){
@@ -242,10 +240,62 @@ class BuyModal extends Component {
                             </Card.Body>
                           </Card>
                           <div style={{display:'flex', justifyContent:'center', marginTop:40 }}>
-                            <Button size="lg" onClick={() => this.buy()  } style={{color:'white', backgroundColor:'seagreen'}}>Buy Share</Button>
+                            <Button size="lg" onClick={() => this.approve()  } style={{color:'white', backgroundColor:'seagreen'}}>Approve</Button>
                           </div>
                         </div>);
                     case 3:
+                        return(
+                            <div>
+                                <div style={{display:'flex', justifyContent:'space-between'}}>
+                                    <ChevronLeft color="slate" size={20}
+                                                 onClick={() => this.setState({screen:1})}/>
+                                    <X color="slate" size={20} onClick={() => this.hideModal()}/>
+                                </div>
+                                <p style={{color:'slate', fontSize:14, fontWeight:'bold', marginTop:20}}>Review Buy</p>
+
+                                <Card style={{backgroundColor:'whitesmoke'}}>
+                                    <Card.Body>
+                                        <div style={{display:'flex'}}><p style={{fontWeight:'bold', fontSize:14, color:'slate'}}>Artist:&nbsp;</p><p style={{fontSize:14, color:'slate'}}>Travis Scott</p></div>
+
+                                        <div style={{display:'flex'}}>
+                                            <p style={{color:'seagreen', fontSize:14}}>{this.state.selectedShares.quantityAvailable} Available Shares </p>
+                                            <p style={{fontSize:14, color:'slate'}}>&nbsp; | &nbsp; </p>
+                                            <p style={{fontSize:14, color:'slate'}}>{this.state.selectedShares.price} DAI per Share</p>
+                                            <p style={{fontSize:14, color:'slate'}}>&nbsp; | &nbsp; </p>
+                                            <p style={{fontSize:14, color:'slate'}}>Settled on {this.state.selectedShares.settledOn}</p>
+                                        </div>
+
+                                        <hr/>
+                                        <div style={{display:'flex'}}>
+                                            <div>
+                                                <p style={{fontSize:14, color:'slate', fontWeight:'bold', marginTop:5 }}>Quantity:&nbsp;</p>
+                                            </div>
+                                            <div>
+                                                <p style={{fontSize:14, color:'slate', fontWeight:'bold', marginTop:5 }}>{this.state.quantity}</p>
+                                            </div>
+                                        </div>
+                                        <div style={{display:'flex'}}>
+                                            <p style={{fontSize:14, color:'slate', fontWeight:'bold'}}>Price:&nbsp;</p>
+                                            <p style={{fontSize:14, color:'slate', }}>{this.state.quantity*this.state.selectedShares.price}  DAI</p>
+                                            <p style={{fontSize:12, color:'grey', fontStyle:'italic', marginLeft:4 , marginTop:2}}>+2.99 DAI (fee) </p>
+                                        </div>
+                                        <hr/>
+                                        <div style={{display:'flex'}}>
+                                            <p style={{fontSize:14, color:'slate', fontWeight:'bold'}}>Total:&nbsp;</p>
+                                            <p style={{fontSize:14, color:'slate', }}>{this.state.quantity*this.state.selectedShares.price + 2.99}  DAI</p>
+                                        </div>
+                                        <div style={{display:'flex'}}>
+                                            <p style={{fontSize:16, color:'red', fontWeight:'bold'}}>Note:&nbsp;</p>
+                                            <p style={{fontSize:16, color:'red', }}>There is 1 more transaction</p>
+                                        </div>
+
+                                    </Card.Body>
+                                </Card>
+                                <div style={{display:'flex', justifyContent:'center', marginTop:40 }}>
+                                    <Button size="lg" onClick={() => this.pay()  } style={{color:'white', backgroundColor:'seagreen'}}>Buy Shares</Button>
+                                </div>
+                            </div>);
+                    case 4:
                         return(<div>
                             <div style={{display:'flex', justifyContent:'flex-end'}}>
                                 <X color="slate" size={20} onClick={() => this.hideModal()}/>
@@ -274,7 +324,7 @@ class BuyModal extends Component {
                             </div>
 
                         </div>);
-                  case 4:
+                  case 5:
                     return(<div>
                                 <div style={{display:'flex', justifyContent:'space-between'}}>
                                     <ChevronLeft color="slate" size={20}

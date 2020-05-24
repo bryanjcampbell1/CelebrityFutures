@@ -9,6 +9,8 @@ import BuyModal from './BuyModal'
 import BetAgainstModal from "./BetAgainstModal";
 
 import mock from "./MockData";
+import SellModal from "./SellModal";
+import getWeb3 from "./getWeb3";
 let mock_AvailableShares = mock.availableShares;
 
 
@@ -29,7 +31,24 @@ class Home extends Component {
       buyModalShow: false,
       betModalShow:false,
       selectedArtist: 'Travis Scott',
-      selectedArtistAvailableShares: mock_AvailableShares
+      selectedArtistAvailableShares: mock_AvailableShares,
+      web3:null,
+      accounts: null,
+    }
+  }
+
+  componentDidMount = async () => {
+    try {
+
+      const web3 = await getWeb3();
+      const accounts = await web3.eth.getAccounts();
+
+      await this.setState({ web3, accounts, } );
+      this.getData();
+
+    } catch (error) {
+
+      console.error(error);
     }
   }
 
@@ -96,6 +115,8 @@ class Home extends Component {
             availableShares={this.state.selectedArtistAvailableShares}
             show={this.state.buyModalShow}
             onHide={() => this.setState({buyModalShow: false})}
+            web3={this.state.web3}
+            accounts={this.state.accounts}
         />
         <BetAgainstModal
             show={this.state.betModalShow}

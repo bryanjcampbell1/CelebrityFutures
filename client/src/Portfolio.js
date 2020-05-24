@@ -243,6 +243,8 @@ class Portfolio extends Component {
                   availableShares={this.state.selectedArtistAvailableShares}
                   show={this.state.buyModalShow}
                   onHide={() => this.setState({buyModalShow: false})}
+                  web3={this.state.web3}
+                  accounts={this.state.accounts}
               />
               <SellModal
                   show={this.state.sellModalShow}
