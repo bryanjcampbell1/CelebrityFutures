@@ -77,7 +77,7 @@ class BuyModal extends Component {
     async pay(){
         let swapContract = new this.props.web3.eth.Contract(abi.swap4.abi, addresses.swapContract);
 
-        const num = 10 * Math.pow(10, 18);
+        const num = (this.state.quantity*87) * Math.pow(10, 18);
         //this.state.quantity*this.state.selectedShares.price
         const numAsHex = "0x" + num.toString(16);
 

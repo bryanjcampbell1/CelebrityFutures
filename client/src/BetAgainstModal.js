@@ -66,7 +66,6 @@ class BetAgainstModal extends Component {
     approveTrade(){
 
 
-
         let that = this;
 
         let tokenA = new this.state.web3.eth.Contract(abi.erc20.abi, addresses.synthToken);
