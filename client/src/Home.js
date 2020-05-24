@@ -56,12 +56,13 @@ class Home extends Component {
   render() {
     return (
       <div>
+
         <Row>
           <Col style={{ background: 'whitesmoke',textAlign: 'center'}}>
             <p style={{marginTop:15, fontSize:25, color:'midnightblue'}}>Make money when an artist rises in the charts by buying shares.</p>
             <p style={{marginTop:-15, fontSize:25, color:'midnightblue'}}>Make money when an artist drops in the charts by betting against and creating shares.</p>
             <div style={{display: 'flex', justifyContent:'center'}}><p style={{marginTop:-15,fontSize:25, color:'midnightblue'}}>Either way </p><p style={{marginTop:-15,fontWeight:'bold', fontSize:25, color:'midnightblue'}}>&nbsp; you make money!</p></div>
-          
+
             <div style={{display: 'flex', justifyContent:'center'}}>
 
               <InputGroup style={{width:'40%', marginTop:30, marginBottom:60}}>
@@ -77,6 +78,8 @@ class Home extends Component {
             </div>
           </Col>
         </Row>
+
+
         <Row>
           <Col >
             <p style={{ margin:15, fontSize:22, color:'midnightblue'}}>Trending Artists</p>
@@ -98,17 +101,43 @@ class Home extends Component {
           </Col>
         </Row>
 
+        <Row>
+          <Col style={{ background: 'whitesmoke',textAlign: 'center'}}>
+           <p style={{marginTop:-15, fontSize:20, color:'midnightblue'}}>By using Spotify’s Popularity Score, we can identify whether an artist has gained or lost popularity over a fixed period of time.</p>
+            <div style={{display: 'flex', justifyContent:'center'}}>
+              <p style={{marginTop:-15,fontWeight:'bold', fontSize:20, color:'midnightblue'}}>BUY&nbsp;</p>
+              <p style={{marginTop:-15,fontSize:20, color:'midnightblue'}}>shares to signal that the artist’s score will  </p>
+              <p style={{marginTop:-15,fontWeight:'bold', fontSize:20, color:'midnightblue'}}>&nbsp; RISE</p>
+            </div>
+            <div style={{display: 'flex', justifyContent:'center'}}>
+              <p style={{marginTop:-15,fontWeight:'bold', fontSize:20, color:'midnightblue'}}>SELL&nbsp;</p>
+              <p style={{marginTop:-15,fontSize:20, color:'midnightblue'}}>to cash in </p>
+            </div>
+            <div style={{display: 'flex', justifyContent:'center'}}>
+              <p style={{marginTop:-15,fontWeight:'bold', fontSize:20, color:'midnightblue'}}>CREATE&nbsp;</p>
+              <p style={{marginTop:-15,fontSize:20, color:'midnightblue'}}>new shares to signal that the artist’s score will</p>
+              <p style={{marginTop:-15,fontWeight:'bold', fontSize:20, color:'midnightblue'}}>&nbsp;FALL</p>
+            </div>
+          </Col>
+        </Row>
+
         <Row style={{margin:40}}>
-          <Col style={{display:'flex', justifyContent:'flex-end'}} > 
-            <Button  onClick={() => this.setState({buyModalShow: true})} size="lg" style={{ background:'slategray', fontSize:22, color:'whitesmoke'}}>
-              Buy Shares
+
+
+          <Col style={{display:'flex', justifyContent:'center'}}>
+            <Button  onClick={() => this.setState({buyModalShow: true})} size="lg" style={{ background:'whitesmoke', fontSize:22, color:'slategray', width:120, marginRight:10}}>
+              BUY
+            </Button>
+            <Button  onClick={() => this.setState({buyModalShow: true})} size="lg" style={{ background:'whitesmoke', fontSize:22, color:'slategray', width:120}}>
+              SELL
+            </Button>
+            <Button onClick={() => this.setState({betModalShow: true})}  size="lg" style={{ background:'whitesmoke', fontSize:22, color:'slategray', width:120, marginLeft:10 }}>
+              CREATE
             </Button>
           </Col>
-          <Col style={{display:'flex', justifyContent:'flex-start'}}>
-            <Button onClick={() => this.setState({betModalShow: true})}  size="lg" style={{ background:'whitesmoke', fontSize:22, color:'slategray'}}>
-              Bet Against
-            </Button>
-          </Col>
+
+
+
         </Row>
         <BuyModal
             artist={this.state.selectedArtist}
@@ -122,6 +151,7 @@ class Home extends Component {
             show={this.state.betModalShow}
             onHide={() => this.setState({betModalShow: false})}
         />
+
       </div>
     )
   }
