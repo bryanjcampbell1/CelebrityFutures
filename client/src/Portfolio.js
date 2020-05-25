@@ -117,6 +117,15 @@ class Portfolio extends Component {
 
   }
 
+  hideModals(){
+    this.setState({
+      buyModalShow: false,
+      sellModalShow: false,
+      addModalShow: false,
+      withdrawModalShow: false, });
+    this.forceUpdate();
+  }
+
   render() {
     return (
       <div >
@@ -241,14 +250,14 @@ class Portfolio extends Component {
               <BuyModal
                   artist={this.state.selectedAsset.artist}
                   availableShares={this.state.selectedArtistAvailableShares}
-                  show={this.state.buyModalShow}
+                  onHide={() => this.hideModals()}
                   onHide={() => this.setState({buyModalShow: false})}
                   web3={this.state.web3}
                   accounts={this.state.accounts}
               />
               <SellModal
                   show={this.state.sellModalShow}
-                  onHide={() => this.setState({sellModalShow: false})}
+                  onHide={() => this.hideModals()}
                   synthBalance={this.state.selectedAsset.quantity}
                   popularity={this.state.selectedAsset.popularity}
                   web3={this.state.web3}
@@ -264,7 +273,7 @@ class Portfolio extends Component {
 
 
                   show={this.state.addModalShow}
-                  onHide={() => this.setState({addModalShow: false})}
+                  onHide={() => this.hideModals()}
 
                   web3={this.state.web3}
                   accounts={this.state.accounts}
@@ -272,7 +281,7 @@ class Portfolio extends Component {
               />
               <WithdrawCollateralModal
                   show={this.state.withdrawModalShow}
-                  onHide={() => this.setState({withdrawModalShow: false})}
+                  onHide={() => this.hideModals()}
 
                   web3={this.state.web3}
                   accounts={this.state.accounts}

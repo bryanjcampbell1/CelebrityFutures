@@ -52,6 +52,11 @@ class Home extends Component {
     }
   }
 
+  hideModals(){
+      this.setState({buyModalShow: false,betModalShow:false })
+      this.forceUpdate();
+  }
+
 
   render() {
     return (
@@ -82,11 +87,15 @@ class Home extends Component {
 
         <Row>
           <Col >
-            <p style={{ margin:15, fontSize:22, color:'midnightblue'}}>Trending Artists</p>
+              <p style={{ margin:15, fontSize:22, color:'midnightblue'}}>Featured Artist</p>
+              <div style={{display:'flex',marginTop:-10, marginLeft:10,}}>
+                  <p style={{ fontSize:18, color:'midnightblue'}}>&nbsp;Travis Scott</p>
+                  <p style={{ marginLeft:5, fontSize:18, color:'grey', fontWeight:'bold'}}>( $TRAVIS )</p>
+              </div>
           </Col>
         </Row>
 
-        <Row style={{margin:40}}>
+        <Row style={{margin:20}}>
           <Col style={{display:'flex', justifyContent:'flex-start' }} sm={1}>
             <ChevronCompactLeft variant="link" color="midnightblue" size={50} style={{marginTop:150, marginLeft:20}}/>
           </Col>
@@ -102,8 +111,8 @@ class Home extends Component {
         </Row>
 
         <Row>
-          <Col style={{ background: 'whitesmoke',textAlign: 'center'}}>
-           <p style={{marginTop:-15, fontSize:20, color:'midnightblue'}}>By using Spotify’s Popularity Score, we can identify whether an artist has gained or lost popularity over a fixed period of time.</p>
+          <Col style={{textAlign: 'center'}}>
+           <p style={{marginTop:-5, fontSize:20, color:'midnightblue'}}>Using Spotify’s Popularity Score, we can identify whether an artist has gained or lost popularity over a fixed period of time.</p>
             <div style={{display: 'flex', justifyContent:'center'}}>
               <p style={{marginTop:-15,fontWeight:'bold', fontSize:20, color:'midnightblue'}}>BUY&nbsp;</p>
               <p style={{marginTop:-15,fontSize:20, color:'midnightblue'}}>shares to signal that the artist’s score will  </p>
@@ -143,13 +152,15 @@ class Home extends Component {
             artist={this.state.selectedArtist}
             availableShares={this.state.selectedArtistAvailableShares}
             show={this.state.buyModalShow}
-            onHide={() => this.setState({buyModalShow: false})}
+            onHide={() => this.hideModals()}
             web3={this.state.web3}
             accounts={this.state.accounts}
         />
         <BetAgainstModal
             show={this.state.betModalShow}
-            onHide={() => this.setState({betModalShow: false})}
+            onHide={() => this.hideModals()}
+            web3={this.state.web3}
+            accounts={this.state.accounts}
         />
 
       </div>

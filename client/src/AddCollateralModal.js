@@ -4,6 +4,7 @@ import {Button, InputGroup, FormControl, Modal, Card} from 'react-bootstrap';
 import {ChevronLeft, X, PlusCircle, DashCircle} from 'react-bootstrap-icons';
 
 import ABIs from "./abis";
+import addresses from "./addresses";
 let SynthTokenAddress = '0x7788d27d015C7f88dEDe5f3C5C66f8BAE8C6f955';
 
 class AddCollateralModal extends Component {
@@ -33,9 +34,7 @@ class AddCollateralModal extends Component {
     async addCollateral(){
         console.log("adding collateral");
 
-        //Gnache host 9545 address
-        let address = '0xa7Efdc8745a8a8D9C6D6DB60cF18056675C42fC4';
-        let TravisScottContract = new this.state.web3.eth.Contract(ABIs.empABI, address);
+        let TravisScottContract = new this.state.web3.eth.Contract(ABIs.empABI, addresses.empContract);
 
         await TravisScottContract.methods.deposit({ rawValue: this.state.web3.utils.toWei("10") }).send({from: this.state.accounts[0]})
             .then(function(receipt){
@@ -70,7 +69,21 @@ class AddCollateralModal extends Component {
 
                                         <Card style={{backgroundColor:'whitesmoke'}}>
                                             <Card.Body>
-                                                <p>Stuff</p>
+                                                <div style={{display:'flex'}}>
+                                                    <div>
+                                                        <p style={{fontSize:14, color:'slate', fontWeight:'bold', marginTop:5 }}>Quantity (DAI)</p>
+                                                    </div>
+                                                    <div>
+                                                        <InputGroup size="sm" style={{width:'30%', marginLeft:10}}>
+                                                            <FormControl
+                                                                placeholder="0"
+                                                                onChange={(e) => this.updateQuantity(e.target.value)}
+                                                                aria-label="quantity"
+                                                                aria-describedby="quantity-shares"
+                                                            />
+                                                        </InputGroup>
+                                                    </div>
+                                                </div>
                                             </Card.Body>
                                         </Card>
                                         <div style={{display:'flex', justifyContent:'center', marginTop:40 }}>

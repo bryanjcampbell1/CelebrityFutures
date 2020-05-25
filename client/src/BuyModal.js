@@ -322,7 +322,6 @@ class BuyModal extends Component {
                                     Ok
                                 </Button>
                             </div>
-
                         </div>);
                   case 5:
                     return(<div>

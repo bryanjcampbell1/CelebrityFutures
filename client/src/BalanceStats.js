@@ -48,16 +48,18 @@ export default class BalanceStats extends Component {
                             textAnchor: 'end',
                         }}
                     />
-
                     <ChartLabel
+                        text="Portfolio Value (DAI)"
                         className="alt-y-label"
                         includeMargin={false}
-                        xPercent={0.05}
+                        xPercent={0.15}
                         yPercent={0.06}
                         style={{
                             textAnchor: 'end',
                         }}
                     />
+
+
                     <XAxis />
                     <YAxis />
                     <LineSeries
